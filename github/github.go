@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/HRMonitorr/githubwrapper"
+	"github.com/HRMonitorr/webhook"
 	"github.com/HRMonitorr/webhook/functions"
 	"github.com/aiteung/atapi"
 	"github.com/aiteung/atmessage"
@@ -16,7 +17,7 @@ import (
 	"strings"
 )
 
-func PostBalasan(w http.ResponseWriter, r *http.Request, githubToken string) {
+func PostBalasan(w http.ResponseWriter, r *http.Request) {
 	var msg model.IteungMessage
 	var resp atmessage.Response
 	json.NewDecoder(r.Body).Decode(&msg)
@@ -64,7 +65,7 @@ func PostBalasan(w http.ResponseWriter, r *http.Request, githubToken string) {
 			pesan := strings.Split(msg.Message, "pesan")
 			datas := githubwrapper.PushRepositories{
 				Context:       context.Background(),
-				PersonalToken: githubToken,
+				PersonalToken: os.Getenv("GITHUBTOKEN"),
 				Reponame:      reponame,
 				OwnerName:     "HRMonitorr",
 				Path:          msg.Filedata,
@@ -88,6 +89,22 @@ func PostBalasan(w http.ResponseWriter, r *http.Request, githubToken string) {
 				Messages: fmt.Sprintf("Hai hai kakakkk sudah berhasil upload nih ke reponyaa %s", responses),
 			}
 			resp, _ = atapi.PostStructWithToken[atmessage.Response]("Token", os.Getenv("TOKEN"), dt, "https://api.wa.my.id/api/send/message/text")
+		} else if strings.Contains(msg.Message, "login") {
+			//login username test password testcihuy
+			messages := strings.Split(msg.Message, " ")
+			username := messages[2]
+			password := messages[len(messages)-1]
+			dt := &webhook.Logindata{
+				Username: username,
+				Password: password,
+			}
+			res, _ := atapi.PostStructWithToken[atmessage.Response]("Token", os.Getenv("TOKEN"), dt, "https://api.wa.my.id/api/send/message/text")
+			dat := &wa.TextMessage{
+				To:       msg.Phone_number,
+				IsGroup:  false,
+				Messages: res.Response,
+			}
+			resp, _ = atapi.PostStructWithToken[atmessage.Response]("Token", os.Getenv("TOKEN"), dat, "https://api.wa.my.id/api/send/message/text")
 		} else {
 			randm := []string{
 				"Hai Hai Haiii kamuuuui " + msg.Alias_name + "\nrofinya lagi gaadaa \n aku giseuubott salam kenall yaaaa \n Cara penggunaan WhatsAuth ada di link berikut ini ya kak...\n" + link,
