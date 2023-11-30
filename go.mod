@@ -5,6 +5,7 @@ go 1.21.3
 toolchain go1.21.4
 
 require (
+	github.com/HRMonitorr/githubwrapper v0.0.5
 	github.com/aiteung/atapi v0.1.1
 	github.com/aiteung/atmessage v0.1.0
 	github.com/aiteung/module v0.1.0
@@ -14,7 +15,6 @@ require (
 require (
 	aidanwoods.dev/go-paseto v1.2.0 // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
-	github.com/HRMonitorr/githubwrapper v0.0.5 // indirect
 	github.com/Rhymen/go-whatsapp v0.1.1 // indirect
 	github.com/aiteung/atdb v0.1.1 // indirect
 	github.com/aiteung/musik v0.0.5 // indirect
