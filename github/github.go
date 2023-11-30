@@ -98,7 +98,7 @@ func PostBalasan(w http.ResponseWriter, r *http.Request) {
 				Username: username,
 				Password: password,
 			}
-			res, _ := atapi.PostStructWithToken[atmessage.Response]("Token", os.Getenv("TOKEN"), dt, "https://api.wa.my.id/api/send/message/text")
+			res, _ := atapi.PostStructWithToken[atmessage.Response]("Token", os.Getenv("TOKEN"), dt, "https://asia-southeast2-gis-project-401902.cloudfunctions.net/Login")
 			dat := &wa.TextMessage{
 				To:       msg.Phone_number,
 				IsGroup:  false,
